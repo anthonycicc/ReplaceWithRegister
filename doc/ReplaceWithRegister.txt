@@ -47,15 +47,23 @@ RELATED WORKS								     *
   depends on another library of the author, and does not have a default
   mapping.
 - Luc Hermitte has an elegant minimalistic visual-mode mapping in
-  http://code.google.com/p/lh-vim/source/browse/misc/trunk/macros/repl-visual-no-reg-overwrite.vim
+  https://github.com/LucHermitte/lh-misc/blob/master/plugin/repl-visual-no-reg-overwrite.vim
 - EasyClip (https://github.com/svermeulen/vim-easyclip) changes the delete
   commands to stop yanking, introduces a new "m" command for cutting, and also
   provides an "s" substitution operator that pastes register contents over the
   moved-over text.
+- R (replace) operator (vimscript #5239) provides an alternative
+  implementation that defaults to the clipboard register.
+- replace_operator.vim (vimscript #5742) provides normal (only with motion,
+  not by lines) and visual mode mappings.
+- subversive.vim (vimscript #5763) provides another alternative
+  implementation, has no default mappings, and as a unique feature provides a
+  two-motion operator that changes all occurrences in the moved-over range
+  with typed text; something similar to the functionality of my ChangeGlobally
+  plugin (vimscript #4321).
 
 ==============================================================================
 USAGE						   *ReplaceWithRegister-usage*
-
 							     *gr* *grr* *v_gr*
 [count]["x]gr{motion}	Replace {motion} text with the contents of register x.
 			Especially when using the unnamed register, this is
@@ -68,10 +76,17 @@ USAGE						   *ReplaceWithRegister-usage*
 ==============================================================================
 INSTALLATION				    *ReplaceWithRegister-installation*
 
-This script is packaged as a |vimball|. If you have the "gunzip" decompressor
-in your PATH, simply edit the *.vmb.gz package in Vim; otherwise, decompress
-the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
-vimball or via the |:UseVimball| command. >
+The code is hosted in a Git repo at
+    https://github.com/inkarkat/vim-ReplaceWithRegister
+You can use your favorite plugin manager, or "git clone" into a directory used
+for Vim |packages|. Releases are on the "stable" branch, the latest unstable
+development snapshot on "master".
+
+
+This script is also packaged as a |vimball|. If you have the "gunzip"
+decompressor in your PATH, simply edit the *.vmb.gz package in Vim; otherwise,
+decompress the archive first, e.g. using WinZip. Inside Vim, install by
+sourcing the vimball or via the |:UseVimball| command. >
     vim ReplaceWithRegister*.vmb.gz
     :so %
 To uninstall, use the |:RmVimball| command.
@@ -117,8 +132,20 @@ TODO						    *ReplaceWithRegister-todo*
 
 IDEAS						   *ReplaceWithRegister-ideas*
 
+CONTRIBUTING				      *ReplaceWithRegister-contribute*
+
+Report any bugs, send patches, or suggest features via the issue tracker at
+https://github.com/inkarkat/vim-ReplaceWithRegister/issues or email (address
+below).
+
 ==============================================================================
 HISTORY						 *ReplaceWithRegister-history*
+
+1.43	19-Nov-2019
+- BUG: {count}grr does not repeat the count.
+- Suppress "--No lines in buffer--" message when replacing the entire buffer,
+  and combine "Deleted N lines" / "Added M lines" into a single message that
+  is given when either previous or new amount of lines reaches 'report'.
 
 1.42	29-Oct-2014
 - BUG: Previous version 1.41 broke replacement of single character with
@@ -194,7 +221,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2008-2014 Ingo Karkat
+Copyright: (C) 2008-2019 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
